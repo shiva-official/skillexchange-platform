@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SkillBridge - AI-Powered Skill Exchange</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body class="bg-gray-50">
+
+  <!-- Header -->
+  <nav class="bg-white shadow-sm sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="flex justify-between items-center h-16">
+        <div class="flex items-center space-x-4">
+          <div class="flex items-center">
+            <i class="fas fa-exchange-alt text-blue-600 text-xl"></i>
+            <span class="ml-2 text-xl font-bold">SkillBridge</span>
+          </div>
+          <div class="hidden md:flex items-center space-x-4">
+            <a href="#dashboard" class="px-3 py-2 rounded-md hover:bg-gray-100">Dashboard</a>
+            <a href="#collab" class="px-3 py-2 rounded-md hover:bg-gray-100">Collaboration</a>
+            <a href="#progress" class="px-3 py-2 rounded-md hover:bg-gray-100">Progress</a>
+          </div>
+        </div>
+        <div class="flex items-center space-x-4">
+          <div class="flex items-center bg-gray-100 px-3 py-1 rounded-full coin-display cursor-pointer">
+            <i class="fas fa-coins text-yellow-500"></i>
+            <span class="ml-2 font-medium">1,240</span>
+          </div>
+          <button onclick="toggleProfileModal()" class="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700">
+            <i class="fas fa-user-plus mr-2"></i>Create Profile
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Profile Creation Modal -->
+  <div id="profileModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+    <div class="bg-white rounded-xl p-6 w-full max-w-md">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-bold">Create Your Profile</h2>
+        <button onclick="toggleProfileModal()" class="text-gray-500 hover:text-gray-700">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="space-y-4">
+        <input type="text" id="profileName" class="w-full border rounded-lg px-4 py-2" placeholder="Your Name" />
+        <input type="text" id="profileSkills" class="w-full border rounded-lg px-4 py-2" placeholder="Skills You Have (comma-separated)" />
+        <input type="text" id="profileSeeking" class="w-full border rounded-lg px-4 py-2" placeholder="Skills You Want to Learn (comma-separated)" />
+        <input type="url" id="profileAvatar" class="w-full border rounded-lg px-4 py-2" placeholder="Avatar Image URL" />
+        <button onclick="createProfile()" class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700">
+          <i class="fas fa-user-plus mr-2"></i>Save Profile
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Dashboard -->
+  <main class="max-w-7xl mx-auto px-4 py-8" id="dashboard">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      
+      <!-- Skill Search Panel -->
+      <div class="bg-white rounded-xl shadow-sm p-6 h-fit lg:sticky top-20">
+        <h2 class="text-xl font-bold mb-4">Find Skill Partners</h2>
+        <div class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium mb-1">I want to learn</label>
+            <input id="learnInput" type="text" class="w-full px-4 py-2 border rounded-lg" placeholder="Web Development">
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1">I can teach</label>
+            <input id="teachInput" type="text" class="w-full px-4 py-2 border rounded-lg" placeholder="Graphic Design">
+          </div>
+          <button onclick="findMatches()" class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700">
+            <i class="fas fa-magic mr-2"></i>Find Matches
+          </button>
+        </div>
+
+        <!-- AI Suggestions -->
+        <div class="mt-6 pt-4 border-t">
+          <h3 class="font-medium mb-2">AI Suggestions</h3>
+          <div class="space-y-2">
+            <div class="flex items-center justify-between p-2 hover:bg-gray-50 rounded-lg cursor-pointer">
+              <div>
+                <p class="text-sm">Learn Python → Teach Photography</p>
+                <p class="text-xs text-gray-500">92% match score</p>
+              </div>
+              <button class="text-blue-600 hover:text-blue-700"><i class="fas fa-arrow-right"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Match Results -->
+      <div class="lg:col-span-2" id="matchResults">
+        <!-- Match cards will be inserted here -->
+      </div>
+    </div>
+  </main>
+
+  <!-- Collaboration Section -->
+  <section class="max-w-7xl mx-auto px-4 py-8" id="collab">
+    <div class="bg-white rounded-xl shadow-sm p-6">
+      <h2 class="text-xl font-bold mb-6">Live Collaboration Space</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="border rounded-lg p-4">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="font-medium">Shared Whiteboard</h3>
+            <button class="text-blue-600 hover:text-blue-700"><i class="fas fa-expand"></i></button>
+          </div>
+          <div class="bg-gray-100 h-48 rounded-lg flex items-center justify-center">
+            <p class="text-gray-500">Whiteboard Placeholder</p>
+          </div>
+        </div>
+        <div class="border rounded-lg p-4">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="font-medium">Session Chat</h3>
+            <div class="flex items-center space-x-2">
+              <button class="text-blue-600 hover:text-blue-700"><i class="fas fa-video"></i></button>
+              <button class="text-blue-600 hover:text-blue-700"><i class="fas fa-phone"></i></button>
+            </div>
+          </div>
+          <div class="h-48 overflow-y-auto space-y-2">
+            <div class="flex items-start space-x-2">
+              <div class="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
+                <i class="fas fa-user text-xs text-blue-600"></i>
+              </div>
+              <div class="bg-gray-100 p-2 rounded-lg">
+                <p class="text-sm">Hi! Ready to start our session?</p>
+                <span class="text-xs text-gray-500">2:34 PM</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Progress Section -->
+  <section class="max-w-7xl mx-auto px-4 py-8" id="progress">
+    <div class="bg-white rounded-xl shadow-sm p-6">
+      <h2 class="text-xl font-bold mb-6">Your Learning Journey</h2>
+      <div class="flex items-center space-x-4 overflow-x-auto pb-4">
+        <div class="flex-shrink-0 w-64 p-4 border rounded-lg">
+          <div class="flex items-center justify-between mb-2">
+            <h3 class="font-medium">Web Development</h3>
+            <span class="text-sm text-green-600">In Progress</span>
+          </div>
+          <div class="w-full bg-gray-200 rounded-full h-2">
+            <div class="bg-blue-600 h-2 rounded-full w-3/4"></div>
+          </div>
+          <div class="mt-2 flex items-center justify-between text-sm">
+            <span>6/8 Sessions</span>
+            <span>+120 Coins</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Script -->
+  <script>
+    const mockUsers = [
+      { id: 1, name: 'Sarah Johnson', avatar: 'https://via.placeholder.com/50', skills: ['Photography', 'Design'], seeking: ['Web Development'], rating: 4.8, coins: 120 },
+      { id: 2, name: 'Raj Kumar', avatar: 'https://via.placeholder.com/50', skills: ['Python', 'AI'], seeking: ['Graphic Design'], rating: 4.5, coins: 85 },
+      // Demo mock user
+      { id: 3, name: 'Emily Smith', avatar: 'https://via.placeholder.com/50', skills: ['JavaScript', 'React'], seeking: ['UI/UX Design'], rating: 4.7, coins: 100 }
+    ];
+
+    function findMatches() {
+      const teach = document.getElementById('teachInput').value.toLowerCase();
+      const learn = document.getElementById('learnInput').value.toLowerCase();
+      const resultContainer = document.getElementById('matchResults');
+      resultContainer.innerHTML = '';
+
+      const matches = mockUsers.filter(user =>
+        user.skills.some(skill => skill.toLowerCase().includes(teach)) &&
+        user.seeking.some(skill => skill.toLowerCase().includes(learn))
+      );
+
+      if (matches.length === 0) {
+        resultContainer.innerHTML = '<p class="text-gray-500">No matches found.</p>';
+      }
+
+      matches.forEach(user => {
+        resultContainer.innerHTML += `
+          <div class="bg-white rounded-xl shadow-sm p-4 mb-4">
+            <div class="flex items-start">
+              <img src="${user.avatar}" class="w-12 h-12 rounded-full object-cover" alt="${user.name}">
+              <div class="ml-4 flex-1">
+                <h3 class="font-bold">${user.name}</h3>
+                <p class="text-sm text-gray-600">Skills: ${user.skills.join(', ')}</p>
+                <p class="text-sm text-gray-600">Seeks: ${user.seeking.join(', ')}</p>
+                <div class="mt-2 flex items-center space-x-4">
+                  <div class="text-yellow-400">
+                    <i class="fas fa-star"></i><span class="ml-1 text-gray-600">${user.rating}</span>
+                  </div>
+                  <div class="text-yellow-500"><i class="fas fa-coins"></i> ${user.coins}</div>
+                </div>
+              </div>
+              <button class="bg-blue-100 text-blue-600 px-4 py-2 rounded-lg hover:bg-blue-200">
+                <i class="fas fa-handshake mr-2"></i>Connect
+              </button>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    // Coin bounce animation
+    document.querySelector('.fa-coins').addEventListener('click', () => {
+      const coinDisplay = document.querySelector('.coin-display');
+      coinDisplay.classList.add('animate-bounce');
+      setTimeout(() => coinDisplay.classList.remove('animate-bounce'), 1000);
+    });
+
+    // Modal toggle logic
+    function toggleProfileModal() {
+      document.getElementById('profileModal').classList.toggle('hidden');
+    }
+
+    // Create new profile
+    function createProfile() {
+      const name = document.getElementById('profileName').value;
+      const skills = document.getElementById('profileSkills').value.split(',').map(s => s.trim());
+      const seeking = document.getElementById('profileSeeking').value.split(',').map(s => s.trim());
+      const avatar = document.getElementById('profileAvatar').value || 'https://via.placeholder.com/50';
+
+      if (name && skills.length && seeking.length) {
+        const newUser = {
+          id: Date.now(),
+          name,
+          avatar,
+          skills,
+          seeking,
+          rating: 5.0,
+          coins: 50
+        };
+        mockUsers.push(newUser);
+        toggleProfileModal();
+        alert('Profile created successfully!');
+      } else {
+        alert('Please fill in all fields.');
+      }
+    }
+  </script>
+
+</body>
+</html>
